@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:stop_watch/platform_alert.dart';
+
 class StopWatch extends StatefulWidget {
-  const StopWatch({Key? key}) : super(key: key);
+  static const route = '/stopwatch';
+  final String? name;
+  final String? email;
+  const StopWatch({Key? key, this.name, this.email}) : super(key: key);
+  // StopWatch(this.name, this.email);
 
   @override
   State<StopWatch> createState() => _StopWatchState();
@@ -34,6 +40,36 @@ class _StopWatchState extends State<StopWatch> {
     setState(() {
       isTicking = false;
     });
+    // final int totalRuntime =
+    //     laps.fold(milliseconds, (total, lap) => total + lap);
+    // final alert = PlatformAlert(
+    //     'Run Completed', 'Total Run Time is ${_secondsText(totalRuntime)}');
+    // alert.show(context);
+    showBottomSheet(context: context, builder: _buildRunCompleteSheet);
+  }
+
+  Widget _buildRunCompleteSheet(BuildContext context) {
+    final int totalRunTime =
+        laps.fold(milliseconds, (total, lap) => total + lap);
+    final textTheme = Theme.of(context).textTheme;
+    return SafeArea(
+        child: Container(
+      color: Theme.of(context).cardColor,
+      width: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 30),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Run Finished!',
+              style: textTheme.headline6,
+            ),
+            Text('Total Run Time is ${_secondsText(totalRunTime)}')
+          ],
+        ),
+      ),
+    ));
   }
 
   String _secondsText(int milliseconds) {
@@ -98,6 +134,17 @@ class _StopWatchState extends State<StopWatch> {
               const SizedBox(
                 width: 20,
               ),
+              // Builder(
+              //     builder: (context) => TextButton(
+              //           onPressed: isTicking ? _stopTimer : null,
+              //           child: Text('Stop'),
+              //           style: ButtonStyle(
+              //             backgroundColor:
+              //                 MaterialStateProperty.all<Color>(Colors.red),
+              //             foregroundColor:
+              //                 MaterialStateProperty.all<Color>(Colors.white),
+              //           ),
+              //         ))
               TextButton(
                 onPressed: isTicking ? _stopTimer : null,
                 child: Text('Stop'),
@@ -130,8 +177,8 @@ class _StopWatchState extends State<StopWatch> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Center(
-            child: Text('StopWatch'),
+          title: Center(
+            child: Text('${widget.name}'),
           ),
         ),
         body: Column(

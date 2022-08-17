@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stop_watch/login_screen.dart';
+import 'package:stop_watch/login.dart';
 import 'package:stop_watch/stopWatch.dart';
 
 void main() => runApp(const StopwatchApp());
@@ -9,8 +9,14 @@ class StopwatchApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginScreen(),
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LoginScreen(),
+        LoginScreen.route: (context) => LoginScreen(),
+        StopWatch.route: (context) => StopwatchApp(),
+      },
+      // home: LoginScreen(),
     );
   }
 }
